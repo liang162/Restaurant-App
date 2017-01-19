@@ -23,6 +23,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.rowHeight=UITableViewAutomaticDimension
         tableView.estimatedRowHeight=120 //scroll height
         
+        tableView.keyboardDismissMode=UIScrollViewKeyboardDismissMode.onDrag
+        
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
@@ -37,6 +39,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             }
         )
         
+        let searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        searchBar.placeholder="Restaurants"
+        navigationItem.titleView=searchBar
+        
         /* Example of Yelp search with more search options specified
          Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
          self.businesses = businesses
@@ -49,6 +56,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
          */
         
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

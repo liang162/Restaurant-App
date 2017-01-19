@@ -120,6 +120,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="ZUa-fS-JCc" firstAttribute="top" secondItem="XhR-oz-92f" secondAttribute="top" id="JXz-q1-Xge"/>
                             <constraint firstAttribute="trailing" secondItem="ZUa-fS-JCc" secondAttribute="trailing" id="PSK-Ct-WM9"/>
