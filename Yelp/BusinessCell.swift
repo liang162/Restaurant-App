@@ -21,7 +21,12 @@ class BusinessCell: UITableViewCell {
     var business: Business! {
         didSet {
             nameLabel.text=business.name
-            thumbImageView.setImageWith(business.imageURL!)
+            
+            if(business.imageURL != nil) {
+                thumbImageView.setImageWith(business.imageURL!)
+            } else {
+                thumbImageView.setImageWith(URL(string: "https://s3-media2.fl.yelpcdn.com/assets/srv0/yelp_styleguide/58cfc999e1f5/assets/img/logos/burst_desktop_xsmall_outline.png")!)
+            }
             categoriesLabel.text=business.categories
             addressLabel.text=business.address
             reviewsCountLabel.text="\(business.reviewCount!) Reviews"

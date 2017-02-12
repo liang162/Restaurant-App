@@ -12,11 +12,22 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     var businesses: [Business]!
     var filteredBusinesses: [Business]!
+    var limitToLoad = 15
+    var loadingMoreView:InfiniteScrollActivityView?
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.isHidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        var insets = tableView.contentInset;
+        insets.bottom += InfiniteScrollActivityView.defaultHeight;
+        tableView.contentInset = insets
         
         tableView.delegate=self
         tableView.dataSource=self
@@ -26,12 +37,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         navigationController?.navigationBar.barTintColor = UIColor(red:0.12, green:0.12, blue:0.12, alpha:0.5)
         
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
-            
-            self.businesses = businesses
-            
+        Business.searchWithTerm(term: "Asian", offset: 0, limit: limitToLoad, completion: { (businesses: [Business]?, error: Error?) -> Void in
             //search function prepare
-            self.filteredBusinesses = businesses
+            self.businesses = businesses
+            self.filteredBusinesses = self.businesses
             self.tableView.reloadData()
             }
         )
@@ -54,6 +63,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
          }
          */
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.barTintColor = UIColor(red:0.12, green:0.12, blue:0.12, alpha:0.5)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -95,13 +108,30 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             
             if(scrollView.contentOffset.y > scrollLimit && tableView.isDragging) {
                 alreadyMadeRequestToAPI = true
+                
+                let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                
                 loadMoreData()
             }
         }
     }
     
     func loadMoreData() {
-        
+        Business.searchWithTerm(term: "Asian", offset: self.businesses.count, limit: limitToLoad, completion: { (businesses: [Business]?, error: Error?) -> Void in
+            if let newData = businesses {
+                self.businesses.append(contentsOf: newData)
+            }
+            //search function prepare
+            self.filteredBusinesses = self.businesses
+            self.alreadyMadeRequestToAPI = false
+            
+            self.loadingMoreView!.stopAnimating()
+            
+            self.tableView.reloadData()
+        }
+        )
     }
     /****** infinite scroll ********/
     
@@ -119,5 +149,40 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
      // Pass the selected object to the new view controller.
      }
      */
+}
+
+class InfiniteScrollActivityView: UIView {
+    var activityIndicatorView: UIActivityIndicatorView = UIActivityIndicatorView()
+    static let defaultHeight:CGFloat = 60.0
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupActivityIndicator()
+    }
+    
+    override init(frame aRect: CGRect) {
+        super.init(frame: aRect)
+        setupActivityIndicator()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        activityIndicatorView.center = CGPoint(x: self.bounds.size.width/2, y: self.bounds.size.height/2)
+    }
+    
+    func setupActivityIndicator() {
+        activityIndicatorView.activityIndicatorViewStyle = .gray
+        activityIndicatorView.hidesWhenStopped = true
+        self.addSubview(activityIndicatorView)
+    }
+    
+    func stopAnimating() {
+        self.activityIndicatorView.stopAnimating()
+        self.isHidden = true
+    }
+    
+    func startAnimating() {
+        self.isHidden = false
+        self.activityIndicatorView.startAnimating()
+    }
 }

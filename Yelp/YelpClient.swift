@@ -43,11 +43,11 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         self.requestSerializer.saveAccessToken(token)
     }
     
-    func searchWithTerm(_ term: String, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
-        return searchWithTerm(term, sort: nil, categories: nil, deals: nil, completion: completion)
+    func searchWithTerm(_ term: String, offset: Int, limit: Int, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
+        return searchWithTerm(term, offset: offset, limit: limit, sort: nil, categories: nil, deals: nil, completion: completion)
     }
     
-    func searchWithTerm(_ term: String, sort: YelpSortMode?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
+    func searchWithTerm(_ term: String, offset: Int?, limit: Int?, sort: YelpSortMode?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
         // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
         
         // Default the location to San Francisco
@@ -65,6 +65,14 @@ class YelpClient: BDBOAuth1RequestOperationManager {
             parameters["deals_filter"] = deals! as AnyObject?
         }
         
+        if limit != nil{
+            parameters["limit"] = limit as AnyObject?
+        }
+        
+        if offset != nil{
+            parameters["offset"] = offset as AnyObject?
+        }
+        
         print(parameters)
         
         return self.get("search", parameters: parameters,
@@ -75,9 +83,9 @@ class YelpClient: BDBOAuth1RequestOperationManager {
                                     completion(Business.businesses(array: dictionaries!), nil)
                                 }
                             }
-                        },
+        },
                         failure: { (operation: AFHTTPRequestOperation?, error: Error) -> Void in
                             completion(nil, error)
-                        })!
+        })!
     }
 }
