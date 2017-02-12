@@ -139,16 +139,21 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? UITableViewCell {
+            print("tableviewcell")
+            let indexPath = tableView.indexPath(for: cell)
+            let business = self.filteredBusinesses![indexPath!.row]
+            
+            let detailedBusinessViewController = segue.destination as! DetailedBusinessViewController
+            detailedBusinessViewController.business = business
+        } else {
+            print("mapview")
+            let mapViewController = segue.destination as! MapViewController
+            mapViewController.businesses = self.filteredBusinesses
+        }
+    }
 }
 
 class InfiniteScrollActivityView: UIView {

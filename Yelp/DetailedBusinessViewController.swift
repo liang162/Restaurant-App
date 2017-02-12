@@ -1,5 +1,5 @@
 //
-//  MapViewController.swift
+//  DetailedBusinessViewController.swift
 //  Yelp
 //
 //  Created by Yinrong Liang on 2/11/17.
@@ -9,50 +9,38 @@
 import UIKit
 import MapKit
 import CoreLocation
+import AFNetworking
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class DetailedBusinessViewController: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet weak var photoView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     
-    var locationManager: CLLocationManager!
-    var businesses: [Business]!
+    var business: Business!
+    var locationManager : CLLocationManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationController?.navigationBar.barTintColor = UIColor(red:1.00, green:1.00, blue:1.00, alpha:0.1)
-        
-        let centerLocation = CLLocation(latitude: 40.425869, longitude: -86.908066)
-        goToLocation(location: centerLocation)
-        
+
+        //mapview setup
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.distanceFilter = 200
         locationManager.requestWhenInUseAuthorization()
         
-        for business in self.businesses {
-            addAnnotationAtAddress(address: business.address!, title: business.name!)
-        }
+        photoView.setImageWith(business.imageURL!)
+        titleLabel.text = business.name!
+        
+        addAnnotationAtAddress(address: business.address!, title: business.name!)
+        
         
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func goToLocation(location: CLLocation) {
-        let span = MKCoordinateSpanMake(0.1, 0.1)
-        let region = MKCoordinateRegionMake(location.coordinate, span)
-        mapView.setRegion(region, animated: true)
-    }
-    
-    func addAnnotationAtCoordinate(coordinate: CLLocationCoordinate2D, title: String) {
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-        annotation.title = title
-        mapView.addAnnotation(annotation)
     }
     
     func addAnnotationAtAddress(address: String, title: String) {
@@ -67,6 +55,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                     self.mapView.addAnnotation(annotation)
                 }
             }
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == CLAuthorizationStatus.authorizedWhenInUse {
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            let span = MKCoordinateSpanMake(0.1, 0.1)
+            let region = MKCoordinateRegionMake(location.coordinate, span)
+            mapView.setRegion(region, animated: false)
         }
     }
     

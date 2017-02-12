@@ -3,7 +3,7 @@
 //  Yelp
 //
 //  Created by Yinrong Liang on 1/17/17.
-//  Copyright © 2017 Timothy Lee. All rights reserved.
+//  Copyright © 2017 Yinrong Liang. All rights reserved.
 //
 
 import UIKit
