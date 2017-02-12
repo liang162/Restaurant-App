@@ -31,6 +31,8 @@ class DetailedBusinessViewController: UIViewController, CLLocationManagerDelegat
         locationManager.requestWhenInUseAuthorization()
         
         photoView.setImageWith(business.imageURL!)
+        photoView.layer.cornerRadius = 4
+        photoView.clipsToBounds=true
         titleLabel.text = business.name!
         
         addAnnotationAtAddress(address: business.address!, title: business.name!)
