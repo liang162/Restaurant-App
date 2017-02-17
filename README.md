@@ -1,28 +1,26 @@
-# Project 3 - Yelp App
+# Restaurant App
 
-Yelp App is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
+Restaurant App is a restaurant search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
 
 ## User Stories
 
-The following **required** functionality is completed:
+The following functionality is completed:
 
-- [x] Table rows for search results should be dynamic height according to the content height.
-- [x] Custom cells should have the proper Auto Layout constraints.
-- [x] Search bar should be in the navigation bar (doesn't have to expand to show location like the real Yelp app does).
+- [x] Table rows for search results are dynamic height according to the content height.
+- [x] Custom cells have the proper Auto Layout constraints.
+- [x] Search bar is in the navigation bar.
 
-The following **optional** features are implemented:
+The following features are implemented:
 
 - [x] Search results page
    - [x] Infinite scroll for restaurant results.
    - [x] Implement map view of restaurant results.
 - [x] Implement the restaurant detail page.
 
-The following **additional** features are implemented:
+The following features are implemented:
 
 - [x] Keybaord dismiss on scroll
 - [x] App icon
-
-Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc)
 
 ## Video Walkthrough 
 
@@ -32,10 +30,6 @@ Here's a walkthrough of implemented user stories:
 <img src='Demo-L.gif' title='Video Walkthrough Landscape' width='' alt='Video Walkthrough Landscape' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
-
-## Notes
-
-Describe any challenges encountered while building the app.
 
 ## License
 
