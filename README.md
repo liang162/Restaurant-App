@@ -2,6 +2,8 @@
 
 An iOS application in Swift to allow users to search for restaurants based on their given locations.
 
+API used: [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api)
+
 ## User Stories
 
 The following functionality is completed:
